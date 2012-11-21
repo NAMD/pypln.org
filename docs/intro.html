@@ -1,0 +1,151 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction to PyPLN &mdash; PyPLN v0.1.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyPLN v0.1.1 documentation" href="index.html" />
+    <link rel="next" title="Installing PyPLN" href="installation.html" />
+    <link rel="prev" title="Welcome to PyPLN’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installing PyPLN"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to PyPLN’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyPLN v0.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction-to-pypln">
+<h1>Introduction to PyPLN<a class="headerlink" href="#introduction-to-pypln" title="Permalink to this headline">¶</a></h1>
+<p><strong>WARNING:</strong> since we rebuilt our backend, this documentation is depreacted.
+Come here in some days and we&#8217;ll have an updated one.</p>
+<p>PyPLN is a distributed pipeline architecture to analyze text. Conceptually, it was idealized to provide a complete analysis of textual documents in any format. A diagram of the currently envisioned analytical tasks can be seen on Figure <a class="reference internal" href="#fig-cmap"><em>Conceptual diagram of PyPLN</em></a>.</p>
+<div class="figure" id="fig-cmap">
+<img alt="_images/pypln.png" src="_images/pypln.png" style="width: 20cm;" />
+<p class="caption">Conceptual diagram of PyPLN</p>
+</div>
+<p>PyPLN makes use of well know text processing tools such as NLTK for natural language processing, and various other opensource tools for  text manipulation. PyPLN developers may develop new or improve existing tools for text/language processing but that is not the main development focus of the project. The main focus of PyPLN is providing a framework for efficient analysis of large collections of text. By efficient analysis we mean the combination of computational, mathematical and visualization techniques.</p>
+<p>PyPLN relies heavily on distributed computing to be able to handle large collections of text. This distributed processing is built upon the ZeroMQ library and its API. Another key element to the scalability of our solution is the adoption of Mongodb for our storage backend. We use its replication and sharding capabilities to maintain IO performance.</p>
+<p>An very simplified example of the inner working of a text processing job in PyPLN is depicted on figure <a class="reference internal" href="#fig-arch"><em>Example text processing job PyPLN.</em></a>.</p>
+<div class="figure" id="fig-arch">
+<img alt="_images/Pipeline_architecture.png" src="_images/Pipeline_architecture.png" style="width: 20cm;" />
+<p class="caption">Example text processing job PyPLN.</p>
+</div>
+<div class="section" id="cluster-architecture">
+<h2>Cluster Architecture<a class="headerlink" href="#cluster-architecture" title="Permalink to this headline">¶</a></h2>
+<p>Although PyPLN can be run on a single server, it can be configured to take advantage of a cluster of machines. Its basic architecture is illustrated on figure <a class="reference internal" href="#fig-cluster"><em>General architecture of a PyPLN cluster</em></a>.</p>
+<div class="figure" id="fig-cluster">
+<img alt="_images/PyPLNcluster.png" src="_images/PyPLNcluster.png" style="width: 20cm;" />
+<p class="caption">General architecture of a PyPLN cluster</p>
+</div>
+<p>The cluster is manager by the manager process which interact with the client interfaces to distribute task to the cluster. But befor it can dedicate itsel to this key job. The manager also takes care of deploying Slavedriver processisn on each node of the cluster and minitoring them on a constant basis.</p>
+<p>Once a new job reaches the managers it distributes it to one or more available Slavedrivers to work on it. The slavedrivers may start one or more apps on their nodes to handle the tasks it receives. The apps will launch multiple workers to crunch on the jobs. and monitor them for job completion or failure, notifying its slavedriver. Apps implements one of the distribution patterns implemented in baseapp.py. The most commonly used pattern is the task ventilator pattern.</p>
+</div>
+<div class="section" id="extending-pypln">
+<h2>Extending PyPLN<a class="headerlink" href="#extending-pypln" title="Permalink to this headline">¶</a></h2>
+<p>PyPLN can be extended through the implementation of new worker, sink or app.
+New workers and sinks should mimic the dummy implentations provided and must subclass BaseWorker and BaseSink, respectively.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_pypln.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to PyPLN</a><ul>
+<li><a class="reference internal" href="#cluster-architecture">Cluster Architecture</a></li>
+<li><a class="reference internal" href="#extending-pypln">Extending PyPLN</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to PyPLN&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="next chapter">Installing PyPLN</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installing PyPLN"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to PyPLN’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">PyPLN v0.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Flávio Codeço Coelho.
+      Last updated on Jun 09, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.8.
+    </div>
+  </body>
+</html>
